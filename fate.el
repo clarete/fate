@@ -22,7 +22,7 @@
 
 (defun fate:state-string ()
   "Generate representation of the current state."
-  (format "%s;%s;%s\n"
+  (format "%s,%s,%s\n"
           (format-time-string "%FT%T.%N%z")
           (fate:buffer-string fate:last-buffer)
           (fate:buffer-string fate:current-buffer)))
