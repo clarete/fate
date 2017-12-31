@@ -1,0 +1,4 @@
+* Fate
+
+  Keeps track of what the gods have whispered you to do while you're
+  on your computer.
