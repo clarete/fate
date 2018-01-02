@@ -4,7 +4,10 @@
 ;;
 ;;; Code:
 
-(defvar fate:data-file "~/.fate.db" "Path to save collected data.")
+(defcustom fate:data-file "~/.fate.db"
+  "Path to save collected data."
+  :group 'fate
+  :type 'string)
 
 (defvar fate:last-buffer nil "Last buffer visited.")
 
