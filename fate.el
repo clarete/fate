@@ -9,9 +9,11 @@
   :group 'fate
   :type 'string)
 
-(defvar fate:last-buffer nil "Last buffer visited.")
+(defvar fate:last-buffer nil
+  "Last buffer visited.")
 
-(defvar fate:current-buffer (current-buffer) "Currently open buffer.")
+(defvar fate:current-buffer (current-buffer)
+  "Currently open buffer.")
 
 (defun fate:update-state ()
   "Update `fate:last-buffer' and `fate:current-buffer'."
