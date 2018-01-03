@@ -1,4 +1,5 @@
 import csv
+import re
 import io
 import os
 import dateutil.parser
@@ -22,15 +23,30 @@ def count(data):
         a, b = b, data.next()
 
 
-def accumulate(data):
+def accumulate(data, transform=lambda x: x):
     values = defaultdict(int)
     for name, time in data:
-        values[name] += time
+        values[transform(name)] += time
     return values.items()
 
 
+
+RES = {
+    'Spotify': re.compile('^\s*Spotify'),
+    'Minibuf': re.compile('^\s*\*Minibuf-\d\*'),
+    'Firefox': re.compile('^\s*Firefox\s-'),
+}
+
+def dedup(name):
+    for short_name, regex in RES.items():
+        if regex.match(name):
+            return short_name
+    return name
+
+
 def main():
-    for name, time in accumulate(count(read(DB_FILE))):
+    accumulated = accumulate(count(read(DB_FILE)), dedup)
+    for name, time in sorted(accumulated, key=lambda x: x[1]):
         print(name, time)
 
 
