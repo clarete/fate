@@ -36,9 +36,17 @@
   (or (buffer-file-name buffer)
       (buffer-name buffer)))
 
+(defun fate:escape (string)
+  "Escape quote char (\") in STRING."
+  (format "\"%s\""
+          (replace-regexp-in-string "\"" "\\\\\"" string)))
+
 (defun fate:state-string-base (left right)
   "Represent state using LEFT and RIGHT."
-  (format "%s,%s,%s\n" (format-time-string "%FT%T.%N%z") left right))
+  (format "%s,%s,%s\n"
+          (format-time-string "%FT%T.%N%z")
+          (fate:escape left)
+          (fate:escape right)))
 
 (defun fate:state-string ()
   "State string with `fate:last-buffer' & `fate:current-buffer'."
