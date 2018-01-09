@@ -17,10 +17,10 @@ def read(input_file):
 
 
 def count(data):
-    a, b = data.next(), data.next()
+    a, b = next(data), next(data)
     while a and b:
         yield b[1], (b[0] - a[0]).total_seconds()
-        a, b = b, data.next()
+        a, b = b, next(data)
 
 
 def accumulate(data, transform=lambda x: x):
