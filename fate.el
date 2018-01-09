@@ -12,7 +12,7 @@
 (defvar fate:last-buffer nil
   "Last buffer visited.")
 
-(defvar fate:current-buffer (current-buffer)
+(defvar fate:current-buffer (fate:buffer-string (current-buffer))
   "Currently open buffer.")
 
 (defcustom fate:idle-time 30
@@ -29,7 +29,7 @@
 (defun fate:update-state ()
   "Update `fate:last-buffer' and `fate:current-buffer'."
   (setq fate:last-buffer fate:current-buffer)
-  (setq fate:current-buffer (current-buffer)))
+  (setq fate:current-buffer (fate:buffer-string (current-buffer))))
 
 (defun fate:buffer-string (buffer)
   "Return either path or name of BUFFER."
@@ -50,21 +50,15 @@
 
 (defun fate:state-string ()
   "State string with `fate:last-buffer' & `fate:current-buffer'."
-  (fate:state-string-base
-   (fate:buffer-string fate:last-buffer)
-   (fate:buffer-string fate:current-buffer)))
+  (fate:state-string-base fate:last-buffer fate:current-buffer))
 
 (defun fate:idle-state-in-string ()
   "String representing entering idle state."
-  (fate:state-string-base
-   (fate:buffer-string fate:current-buffer)
-   "**idle-fate**"))
+  (fate:state-string-base fate:current-buffer "**idle-fate**"))
 
 (defun fate:idle-state-out-string ()
   "String representing leaving idle state."
-  (fate:state-string-base
-   "**idle-fate**"
-   (fate:buffer-string fate:current-buffer)))
+  (fate:state-string-base "**idle-fate**" fate:current-buffer))
 
 (defun fate:log-state (state)
   "Write STATE to the database file."
@@ -93,7 +87,7 @@
 (defun fate:post-command-watcher ()
   "Decide if internal state should be updated."
   (fate:timer-to-idle-state)
-  (if (not (eq fate:current-buffer (current-buffer)))
+  (if (not (eq fate:current-buffer (fate:buffer-string (current-buffer))))
       (progn
         (fate:update-state)
         (fate:log-state (fate:state-string)))))
