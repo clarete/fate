@@ -64,7 +64,15 @@ def test_count():
 
     # Then it should count how much time was spent in each buffer
     output.should.equal([
-        ('Buffer 2', 1.0),
-        ('Buffer 3', 2.0),
-        ('Buffer 4', 3.0),
+        ((datetime.datetime(2017, 12, 31, 12, 15, 32, 0, tzinfo=TZ),
+          datetime.datetime(2017, 12, 31, 12, 15, 33, 0, tzinfo=TZ)),
+         'Buffer 2', 1.0),
+
+        ((datetime.datetime(2017, 12, 31, 12, 15, 33, 0, tzinfo=TZ),
+          datetime.datetime(2017, 12, 31, 12, 15, 35, 0, tzinfo=TZ)),
+         'Buffer 3', 2.0),
+
+        ((datetime.datetime(2017, 12, 31, 12, 15, 35, 0, tzinfo=TZ),
+          datetime.datetime(2017, 12, 31, 12, 15, 38, 0, tzinfo=TZ)),
+         'Buffer 4', 3.0),
     ])
