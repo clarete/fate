@@ -45,12 +45,13 @@ def accumulate(data, transform=lambda x: x):
     return values.items()
 
 
-
 RES = {
+    '*Minibuf*': re.compile('^\s*\*Minibuf-\d\*'),
     'Spotify': re.compile('^\s*Spotify'),
-    'Minibuf': re.compile('^\s*\*Minibuf-\d\*'),
     'Firefox': re.compile('^\s*Firefox\s-'),
+    'Chromium': re.compile('^\s*Chromium\s-'),
 }
+
 
 def dedup(name):
     for short_name, regex in RES.items():
