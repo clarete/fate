@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import argparse
 import csv
 import datetime
 import re
@@ -22,6 +23,7 @@ import sys
 
 import dateparser
 import dateutil.parser
+import pylab
 
 from collections import defaultdict
 
@@ -44,49 +46,89 @@ def count(data):
 
 
 RES = {
-    '*Minibuf*': re.compile('^\s*\*Minibuf-\d\*'),
-    'Spotify': re.compile('^\s*Spotify'),
-    'Firefox': re.compile('^\s*Firefox\s-'),
-    'Chromium': re.compile('^\s*Chromium\s-'),
+    re.compile('\*\*idle-fate\*\*'): 'Idle',
+    re.compile('^\s*Franz'): 'Chat',
+
+    re.compile('^\s*\*Minibuf-\d\*'): 'Minibuf',
+    re.compile('^\s*\*Backtrace'): 'Emacs',
+    re.compile('^\s*\*Completions'): 'Emacs',
+    re.compile('^\s*\*Help'): 'Emacs',
+    re.compile('^\s*\*Messages'): 'Emacs',
+
+    re.compile('^\s*Spotify'): 'Spotify',
+    re.compile('^\s*Firefox\s-'): 'Browsing',
+    re.compile('^\s*Chromium\s-'): 'Browsing',
+    re.compile('\*eww'): 'Browsing',
+
+    re.compile('\*ansi-term\*'): 'Terminal',
+    re.compile('\*eshell\*'): 'Terminal',
+
+    re.compile('\*magit'): 'Coding',
+    re.compile('\*Org\sAgenda'): 'Org',
+    re.compile('\*Calendar\*'): 'Org',
 }
 
 
-def dedup(name):
-    for short_name, regex in RES.items():
+def by_same(name):
+    for regex, short_name in RES.items():
         if regex.match(name):
             return short_name
     return name
 
 
-def accumulate(data, filtr):
-    values = defaultdict(int)
+PATHS = {
+    '/home/lincoln/src': 'Coding',
+    '/home/lincoln/ord': 'Org',
+}
+
+def by_path(name):
+    for path, short_name in PATHS.items():
+        if name.startswith(path):
+            return short_name
+    return name
+
+
+def date_filter(data, filter_range):
     for date_range, name, time in data:
-        if date_filter(filtr, date_range):
-            values[dedup(name)] += time
+        tzinfo = date_range[0].tzinfo
+        if date_range[0] >= filter_range[0].replace(tzinfo=tzinfo) and \
+           date_range[1] <= filter_range[1].replace(tzinfo=tzinfo):
+            yield name, time
+
+
+def group(by, data):
+    values = defaultdict(int)
+    for name, time in data:
+        values[by(name)] += time
     return values.items()
 
 
-def date_filter(filter_range, date_range):
-    tzinfo = date_range[0].tzinfo
-    return date_range[0] >= filter_range[0].replace(tzinfo=tzinfo) and \
-        date_range[1] <= filter_range[1].replace(tzinfo=tzinfo)
+def pie(groups):
+    pylab.figure(1, figsize=(6,6))
+    pylab.pie(groups.values(), labels=groups.keys())
+    pylab.show()
+    for name, time in sorted(groups.items(), key=lambda x: x[1]):
+        print(name, time)
+
+
+def commandline():
+    parser = argparse.ArgumentParser(description='Visualize fate data.')
+    parser.add_argument('--date-from', metavar='DF',
+                        type=dateparser.parse,
+                        default=datetime.datetime(2017, 12, 1, 0, 0),
+                        help='show no entries before this date')
+    parser.add_argument('--date-to', metavar='DT',
+                        type=dateparser.parse,
+                        default='now',
+                        help='show no entries after this date')
+    return parser.parse_args()
 
 
 def main():
-    len_argv = len(sys.argv)
-    if len_argv == 1:
-        from_date = datetime.datetime(2017, 12, 1, 0, 0)
-        to_date = datetime.datetime.now()
-    elif len_argv == 2:
-        from_date = dateparser.parse(sys.argv[1])
-        to_date = datetime.datetime.now()
-    elif len_argv == 3:
-        from_date = dateparser.parse(sys.argv[1])
-        to_date = dateparser.parse(sys.argv[2])
-    date_range = (from_date, to_date)
-    accumulated = accumulate(count(read(DB_FILE)), date_range)
-    for name, time in sorted(accumulated, key=lambda x: x[1]):
-        print(name, time)
+    args = commandline()
+    data = date_filter(count(read(DB_FILE)), (args.date_from, args.date_to))
+    groups = group(by_path, group(by_same, data))
+    pie({k: v for k, v in groups if v > 100})
 
 
 if __name__ == '__main__':
