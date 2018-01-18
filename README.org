@@ -23,7 +23,36 @@
   use Emacs. When the mortal switches buffers, fate records the
   switching event an it's written in a file (=~/.fate.db= by default.)
 
+  In order to have their fate written, one must first enable the
+  extension. That can be done using the following Emacs Lisp snippet:
+
+  #+begin_src emacs-lisp
+  (add-to-list 'load-path "/home/user/src/github.com/clarete/fate")
+  (require 'fate)
+  #+end_src
+
+* Look up your fate
+
   Whenever the mortal wants to read the whispers of the gods they can
   use the tools in the *analyze* directory to see what they've been up
   to.
 
+  Assuming there's a [[http://virtualenvwrapper.readthedocs.io][Virtualenv]] installed and working. Run the
+  following commands to install the dependencies
+
+  #+begin_src bash
+  $ pip install -r requirements.txt
+  #+end_src
+
+  After that just run the processing software and see what the gods
+  have gotten you to do:
+
+  #+begin_src bash
+  $ python process.py --date-from='10 minutes ago' --output=out.png
+  #+end_src
+
+  Both =--date-from= and =--date-to= parameters are parsed with
+  [[https://github.com/scrapinghub/dateparser][dateparser]]. Their website document all valid formats.
+
+  #+CAPTION: Example output
+  [[./example-output.png]]
