@@ -103,12 +103,15 @@ def group(by, data):
     return values.items()
 
 
-def pie(groups):
-    pylab.figure(1, figsize=(6,6))
-    pylab.pie(groups.values(), labels=groups.keys())
-    pylab.show()
+def print_groups(groups):
     for name, time in sorted(groups.items(), key=lambda x: x[1]):
         print(name, time)
+
+
+def pie(output, groups):
+    pylab.figure(1, figsize=(6,6))
+    pylab.pie(groups.values(), labels=groups.keys())
+    pylab.savefig(output, bbox_inches='tight')
 
 
 def commandline():
@@ -121,6 +124,9 @@ def commandline():
                         type=dateparser.parse,
                         default='now',
                         help='show no entries after this date')
+    parser.add_argument('--output', metavar='OUT',
+                        default='fate-output.png',
+                        help='output file name')
     return parser.parse_args()
 
 
@@ -128,7 +134,9 @@ def main():
     args = commandline()
     data = date_filter(count(read(DB_FILE)), (args.date_from, args.date_to))
     groups = group(by_path, group(by_same, data))
-    pie({k: v for k, v in groups if v > 100})
+    filtered = {k: v for k, v in groups if v > 500}
+    print_groups(filtered)
+    pie(args.output, filtered)
 
 
 if __name__ == '__main__':
