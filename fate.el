@@ -33,9 +33,6 @@
 (defvar fate:last-buffer nil
   "Last buffer visited.")
 
-(defvar fate:current-buffer (fate:buffer-string (current-buffer))
-  "Currently open buffer.")
-
 (defcustom fate:idle-time 30
   "Log as idle time after N seconds."
   :group 'fate
@@ -47,15 +44,18 @@
 (defvar fate:idle-handler nil
   "Handler of the idle timer.")
 
-(defun fate:update-state ()
-  "Update `fate:last-buffer' and `fate:current-buffer'."
-  (setq fate:last-buffer fate:current-buffer)
-  (setq fate:current-buffer (fate:buffer-string (current-buffer))))
-
 (defun fate:buffer-string (buffer)
   "Return either path or name of BUFFER."
   (or (buffer-file-name buffer)
       (buffer-name buffer)))
+
+(defvar fate:current-buffer (fate:buffer-string (current-buffer))
+  "Currently open buffer.")
+
+(defun fate:update-state ()
+  "Update `fate:last-buffer' and `fate:current-buffer'."
+  (setq fate:last-buffer fate:current-buffer)
+  (setq fate:current-buffer (fate:buffer-string (current-buffer))))
 
 (defun fate:escape (string)
   "Escape quote char (\") in STRING."
