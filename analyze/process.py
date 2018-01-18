@@ -78,7 +78,7 @@ def by_same(name):
 
 PATHS = {
     '/home/lincoln/src': 'Coding',
-    '/home/lincoln/ord': 'Org',
+    '/home/lincoln/org': 'Org',
 }
 
 def by_path(name):
