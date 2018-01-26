@@ -32,7 +32,7 @@ DB_FILE = os.path.expanduser('~/.fate.db')
 
 def read(input_file):
     with io.open(input_file, 'rb') as db:
-        for line in csv.reader(db):
+        for line in csv.reader(db, escapechar='\\'):
             timestamp, from_buffer, to_buffer = line
             yield dateutil.parser.parse(timestamp), from_buffer, to_buffer
 
