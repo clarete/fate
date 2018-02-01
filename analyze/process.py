@@ -78,8 +78,8 @@ def by_same(name):
 
 
 PATHS = {
-    '/home/lincoln/src': 'Coding',
-    '/home/lincoln/org': 'Org',
+    os.path.expanduser('~/src'): 'Coding',
+    os.path.expanduser('~/org'): 'Org',
 }
 
 def by_path(name):
