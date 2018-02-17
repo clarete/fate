@@ -59,8 +59,7 @@
 
 (defun fate:escape (string)
   "Escape quote char (\") in STRING."
-  (format "\"%s\""
-          (replace-regexp-in-string "\"" "\\\\\"" string)))
+  (format "\"%s\"" (prin1-to-string string)))
 
 (defun fate:state-string-base (left right)
   "Represent state using LEFT and RIGHT."
