@@ -56,9 +56,11 @@ RES = {
     re.compile('^\s*\*Messages'): 'Emacs',
 
     re.compile('^\s*Pgadmin'): 'Pgadmin',
+    re.compile('^\s*\*Treemacs'): 'Treemacs',
     re.compile('^\s*Spotify'): 'Spotify',
     re.compile('^\s*Firefox\s-'): 'Browsing',
     re.compile('^\s*Chromium\s-'): 'Browsing',
+    re.compile('^\s*DBeaver\s-'): 'DBeaver',
     re.compile('\*eww'): 'Browsing',
 
     re.compile('\*ansi-term\*'): 'Terminal',
