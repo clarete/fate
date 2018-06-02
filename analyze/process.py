@@ -88,7 +88,7 @@ def by_path(name):
     for path, short_name in PATHS.items():
         if name.startswith(path):
             return short_name
-    return name
+    return os.path.basename(name)
 
 
 def date_filter(data, filter_range):
