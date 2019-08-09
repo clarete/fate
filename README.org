@@ -56,3 +56,9 @@
 
   #+CAPTION: Example output
   [[./example-output.png]]
+
+  I don't stare that much at the computer. The idle time is exactly
+  the opposite. It's when I'm not interacting with the computer. A
+  function is scheduled to bump a timer every time Emacs receives
+  *any* events -- if nothing comes for a certain amount of time, we
+  enter idle-time.
