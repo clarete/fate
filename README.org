@@ -7,7 +7,7 @@
   the amazing [[https://github.com/ch11ng/exwm][EXWM]] environment, you can't help yourself and stop
   whatever you're doing to [[https://www.reddit.com/r/spiders/comments/3g6l8c/how_far_do_spiders_see/][read about how far spiders can see]].
 
-  There's no way. Caos comes from within, from the wishes of the gods
+  There's no way. Chaos comes from within, from the wishes of the gods
   of Olympus. We mortals are left with our fate that can only be
   observed. And as mortals, we build tools for anything we can
   possibly do, so we don't have to do them ourselves.
@@ -17,7 +17,7 @@
 
 * How fate is decided
 
-  As mortals that use computers, we all need to express caos within us
+  As mortals that use computers, we all need to express chaos within us
   and we keep trying to do more than one thing at a time. Fate is an
   [[https://www.gnu.org/software/emacs/][Emacs]] extension that watches all the commands executed while mortals
   use Emacs. When the mortal switches buffers, fate records the
